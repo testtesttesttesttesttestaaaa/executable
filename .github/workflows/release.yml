@@ -3,18 +3,28 @@ on: workflow_dispatch
 jobs:
   build-project:
     name: Build Python project
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - run: mkdir -p path/to/artifact
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
 
-      - run: echo hello > path/to/artifact/world.txt
+      - name: Install PyInstaller
+        run: |
+          pip install pyinstaller
+
+      - name: Build executable
+        run: |
+          pyinstaller main.py --onefile -w
 
       - uses: actions/upload-artifact@v3
         with:
           name: site-build
-          path: path/to/artifact/world.txt
+          path: dist/main.exe
           
   distribute-project:
     name: Distribute project to GitHub Releases
