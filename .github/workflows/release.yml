@@ -2,7 +2,7 @@ name: Release
 on: workflow_dispatch
 
 jobs:
-  build-project:
+  build:
     name: Build Python project
     runs-on: ${{ matrix.os }}
     strategy:
@@ -33,11 +33,7 @@ jobs:
         with:
           name: site-build
           path: dist/main.exe
-
-  distribute-project:
-    name: Distribute project to GitHub Releases
-    runs-on: ubuntu-latest
-    steps:
+          
       - name: Download site content
         uses: actions/download-artifact@v2
         with:
