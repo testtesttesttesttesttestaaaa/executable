@@ -20,25 +20,23 @@ jobs:
       - name: Build executable
         run: |
           pyinstaller main.py --onefile -w
-
-      - uses: actions/upload-artifact@v3
+          
+      - name: Upload Assetd
+        uses: actions/upload-artifact@v3
         with:
           name: site-build
           path: dist/main.exe
           
-  distribute-project:
-    name: Distribute project to GitHub Releases
-    runs-on: ubuntu-latest
-    needs: build-project
-    steps:
       - name: Download site content
         uses: actions/download-artifact@v2
         with:
           name: site-build
+          
       - name: Archive site content
         uses: thedoctor0/zip-release@master
         with:
           filename: site.zip
+          
       - name: Create GitHub release
         id: create-new-release
         uses: actions/create-release@v1
@@ -47,6 +45,7 @@ jobs:
         with:
           tag_name: v${{ github.run_number }}
           release_name: Release ${{ github.run_number }}
+          
       - name: Upload asset to GitHub release
         uses: actions/upload-release-asset@v1
         env:
